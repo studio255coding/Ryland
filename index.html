@@ -1,11 +1,20 @@
-<html>
+0./<html>
   <head><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script></head>   
     <body>
     
-    
+
     <script src="./three.js-dev/build/three.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/p5@1.2.0/lib/p5.js"></script>
     <script>
+function setup(){
+const wood = [
+"preu",
+0
+]
+const grass = [
+
+    ]
+
         var scene = new THREE.Scene(); 
         var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000) 
         camera.position.z = 25;
@@ -15,25 +24,28 @@
         renderer.setSize(window.innerWidth,window.innerHeight); 
         document.body.appendChild(renderer.domElement); 
 
-        var totalCubes = 100;
+        var totalCubes = 1000;
         for(var i=0; i<Math.sqrt(totalCubes); i++){
           for(var j=0; j<Math.sqrt(totalCubes); j++){
-            var geometry = new THREE.BoxGeometry(1, 1, 1)
-            var material = new THREE.MeshLambertMaterial({color: "green"})
+            var dop = (noise(i, j) * 50) + 10;
+            for(var height = 0; height < dop; height++){
+            var geometry = new THREE.BoxGeometry(3,3,3 )
+            var material = new THREE.MeshLambertMaterial({color: "brown"})
             var cube1 = new THREE.Mesh(geometry, material)
             cube1.position.x  = i;
             cube1.position.z = j; 
             scene.add(cube1)
-      }
-    }
-      var light = new THREE.PointLight(0xFFFFFF, 1, 500); 
+            }
+          }
+  }
+      var light = new THREE.PointLight(0xFFFFFF, 300, 1000)
 light.position.set(10, 0, 25);
 scene.add(light);
         var render = function() {
           requestAnimationFrame(render);
           renderer.render(scene, camera); 
         }
-        render();
+        render
 
 
 
@@ -73,7 +85,7 @@ document.body.onmousemove = function(evt) {
       this.camera.position.y-=1;
     }
   };
-
+}
     </script>
   </body>
 </html>
