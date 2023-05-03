@@ -1,97 +1,168 @@
 <html>
-  <head><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script></head>
-  <body>
-    <script src="./three.js-dev/build/three.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/p5@1.2.0/lib/p5.js"></script>
-    <script>
-function setup(){
-const wood = [
-"preu",
-0
-]
-const grass = [
 
-    ]
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
 
-        var scene = new THREE.Scene(); 
-        var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000) 
-        camera.position.z = 25;
-        camera.position.y = 5;
-        var renderer = new THREE.WebGLRenderer({antialias: true});
-        renderer.setClearColor("blue"); 
-        renderer.setSize(window.innerWidth,window.innerHeight); 
-        document.body.appendChild(renderer.domElement); 
+<body>
+  <script src="./three.js-dev/build/three.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.2.0/lib/p5.js"></script>
+  <script>
+    function setup() {
+      const wood = [
+        "preu",
+        0
+      ]
+      const grass = [
 
-        var totalCubes = 100;
-        for(var i=0; i<Math.sqrt(totalCubes); i++){
-          for(var j=0; j<Math.sqrt(totalCubes); j++){
-            for(var height = 0; height <= Math.ceil((noise(i*0.05, height*0.05, j*0.05) * 50) + 10); height++){
-            var geometry = new THREE.BoxGeometry(3,3,3 )
-            var material = new THREE.MeshLambertMaterial({color: "brown"})
+      ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+      camera.position.z = 25;
+      camera.position.y = 5;
+      var renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setClearColor("blue");
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      var totalCubes = 200;
+      for (var i = 0; i < Math.sqrt(totalCubes); i++) {
+        for (var j = 0; j < Math.sqrt(totalCubes); j++) {
+          for (var height = 0; height <= Math.ceil((noise(i * 0.05, height * 0.05, j * 0.05) * 10) + 2); height++) {
+            var geometry = new THREE.BoxGeometry(3, 3, 3)
+            var material = new THREE.MeshLambertMaterial({ color: "green" })
             var cube1 = new THREE.Mesh(geometry, material)
-            cube1.position.x  = i;
-            cube1.position.z = j; 
-            cube1.position.y = height*3;
+            cube1.position.x = i;
+            cube1.position.z = j;
+            cube1.position.y = height * 3;
             scene.add(cube1)
-            }
           }
-  }
-      var light = new THREE.PointLight(0xFFFFFF, 300, 1000)
-light.position.set(10, 0, 25);
-scene.add(light);
-        var render = function() {
-          requestAnimationFrame(render);
-          renderer.render(scene, camera); 
         }
-        render()
+      }
+      var light = new THREE.PointLight(0xFFFFFF, 1, 1000)
+      light.position.set(10, 100, 25);
+      scene.add(light);
+
+      var raycaster = new THREE.Raycaster();
+      var ry = new THREE.Vector3(0, -1, 0);
+      var render = function () {
+        raycaster.set(camera.position, ry )
+        const intersects = raycaster.intersect0bjects(scene.children);
+        if(intersects.length > 0 && intersects[0].distance > 2)
+        requestAnimationFrame(render);
+        renderer.render(scene, camera);
+      }
+      render()
+      document.body.requestPointerLock = document.body.requestPointerLock ||
+        document.body.mozRequestPointerLock;
+      document.exitPointerLock = document.exitPointerLock ||
+        document.mozExitPointerLock;
+      document.body.onclick = function () {
+        document.body.requestPointerLock();
+      
+camera.position.y-=0.2;
 
 
+      document.body.onmousemove = function (evt) {
+        camera.rotation.y -= evt.movementX / 65;
+        //if(Math.abs(camera.rotation.x)<1){camera.rotation.x-=evt.movementY/65;}else{camera.rotation.x-=(camera.rotation.x/Math.abs(camera.rotation.x))/100}
+      };
 
-
-document.body.requestPointerLock = document.body.requestPointerLock ||
-                                    document.body.mozRequestPointerLock;
-        document.exitPointerLock = document.exitPointerLock ||
-                                   document.mozExitPointerLock;
-        document.body.onclick = function() {
-          document.body.requestPointerLock();
-        };
-        
-
-
-document.body.onmousemove = function(evt) {
-    camera.rotation.y-=evt.movementX/65;
-    //if(Math.abs(camera.rotation.x)<1){camera.rotation.x-=evt.movementY/65;}else{camera.rotation.x-=(camera.rotation.x/Math.abs(camera.rotation.x))/100}
-  };
-
-  document.body.onkeydown = function (evt) {
-    if(evt.keyCode==38||evt.keyCode==87) { //forwards
-      var direction = new THREE.Vector3();
-      camera.getWorldDirection( direction );
-      camera.position.add( direction );
+      document.body.onkeydown = function (evt) {
+        if (evt.keyCode == 38 || evt.keyCode == 87) { //forwards
+          var direction = new THREE.Vector3();
+          camera.getWorldDirection(direction);
+          camera.position.add(direction);
+        }
+        if (evt.keyCode == 40 || evt.keyCode == 83) { //backwards
+          var direction = new THREE.Vector3();
+          camera.getWorldDirection(direction);
+          camera.position.sub(direction);
+        }
+        if (evt.keyCode == 32) { //jump
+          this.camera = camera;
+          this.camera.position.y += 1;
+        }
+        if (evt.keyCode == 17) { //go down //control key
+          this.camera = camera;
+          this.camera.position.y -= 1;
+        }
+      };
     }
-    if(evt.keyCode==40||evt.keyCode==83) { //backwards
-      var direction = new THREE.Vector3();
-      camera.getWorldDirection( direction );
-      camera.position.sub( direction );
-    }
-    if(evt.keyCode==32) { //jump
-      this.camera = camera;
-      this.camera.position.y+=1;
-    }
-    if(evt.keyCode==17) { //go down //control key
-      this.camera = camera;
-      this.camera.position.y-=1;
-    }
-  };
-}
-    </script>
-  </body>
+  </script>
+</body>
+
 </html>
-
-
-
-
-
-
-
-
